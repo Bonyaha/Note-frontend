@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Display from './Display';
+
 import Button from './Button';
 
 const App = () => {
@@ -36,9 +36,9 @@ const App = () => {
   let mostVotes = Math.max(...numVotes);
 
   let indexes = [];
-  numVotes.filter((item, index) => {
-    if (mostVotes == 0) return false;
-    else if (item == mostVotes) {
+  numVotes.forEach((item, index) => {
+    if (mostVotes === 0) return false;
+    else if (item === mostVotes) {
       indexes.push(index);
     }
   });
@@ -54,10 +54,9 @@ const App = () => {
       {text}
       <br />
       <p>has {numVotes[selected]} votes</p>
-      <button onClick={votePoints} style={{ marginRight: '15px' }}>
-        vote
-      </button>
-      <button onClick={randomeJoke}>random anecdote</button>
+      <Button onClick={votePoints} text={'vote'} />
+
+      <Button onClick={randomeJoke} text={'random anecdote'} />
       <h2>Anecdote with the most votes</h2>
       {allMostVoted()}
       <p>has {mostVotes} votes</p>
