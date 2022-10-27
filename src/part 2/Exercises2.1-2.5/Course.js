@@ -11,9 +11,6 @@ const Course = ({ courses }) => {
           <Total parts={item.parts} />
         </>
       ))}
-      {/* <Header title={course.name} />
-      
-       */}
     </div>
   );
 };
