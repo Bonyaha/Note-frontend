@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from './part 2/Exercises2.1-2.5/App';
+import App from './part 2/Ex.2.6-2.10/App';
 const notes = [
   {
     id: 1,
@@ -25,6 +25,6 @@ const notes = [
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App notes={notes} />
+    <App />
   </React.StrictMode>
 );
