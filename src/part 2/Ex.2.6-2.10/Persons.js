@@ -1,7 +1,7 @@
 import React from 'react';
 import Display from './Display';
 
-const Person = ({ filtered }) => {
+const Person = ({ persons, filtered }) => {
   return (
     <ol className="list-group list-group-numbered">
       {filtered.length

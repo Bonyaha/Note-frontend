@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from './part 2/Ex.2.6-2.10/App';
+import App from './countries/app';
+
 const notes = [
   {
     id: 1,
@@ -22,7 +23,6 @@ const notes = [
     important: true,
   },
 ];
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
