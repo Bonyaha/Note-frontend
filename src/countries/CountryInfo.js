@@ -5,10 +5,12 @@ const Lang = (props) => {
 };
 
 const CountryInfo = (props) => {
+  let { data } = props.currentWeather;
   let { temp } = props;
   let { languages } = props.country;
   let lang = Object.keys(languages);
-  console.log(lang);
+  let lat = props.country.capitalInfo.latlng[0];
+  let lon = props.country.capitalInfo.latlng[1];
 
   let { country } = props;
   return (
@@ -25,6 +27,7 @@ const CountryInfo = (props) => {
         ''
       )}
       <h1>{country.name.common}</h1>
+
       <h6>capital: {country.capital}</h6>
       <h6>area: {country.area}</h6>
       <h6>population: {country.population}</h6>
@@ -35,6 +38,16 @@ const CountryInfo = (props) => {
         })}{' '}
       </ul>
       <img src={country.flags.png} alt="flag" style={{ height: '150px' }} />
+      <div className="weather">
+        <h2>Weather in {country.capital}</h2>
+        <p>temperature {Math.round(data.main.temp)}°C</p>
+        <img
+          alt="weather"
+          className="weather-icon"
+          src={`icons/${data.weather[0].icon}.png`}
+        />
+        <p>Wind {data.wind.speed}m/s</p>
+      </div>
     </>
   );
 };

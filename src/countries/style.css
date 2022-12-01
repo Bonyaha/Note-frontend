@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #d8dadd;
+}
+.weather {
+  width: 300px;
+  border-radius: 6px;
+  box-shadow: 10px -2px 20px 2px rgb(0 0 0/30%);
+  color: #fff;
+  background-color: #333;
+  margin: 15px 5px;
+  padding: 0 20px 20px 20px;
+}

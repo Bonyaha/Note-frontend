@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Display = ({ info, number }) => {
+const Display = ({ name, number }) => {
   //console.log(info);
   return (
     <li className="list-group-item">
-      {info.name}: {number}
+      {name}: {number}
     </li>
   );
 };

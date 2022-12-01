@@ -2,7 +2,14 @@ import React from 'react';
 import List from './List';
 import CountryInfo from './CountryInfo';
 
-const Display = ({ showCountries, onChange, showDetails, temp, back }) => {
+const Display = ({
+  showCountries,
+  onChange,
+  showDetails,
+  temp,
+  back,
+  currentWeather,
+}) => {
   return (
     <div className="m-3">
       Search:
@@ -27,6 +34,7 @@ const Display = ({ showCountries, onChange, showDetails, temp, back }) => {
             return (
               <CountryInfo
                 country={item}
+                currentWeather={currentWeather}
                 temp={temp}
                 back={back}
                 key={item.ccn3}

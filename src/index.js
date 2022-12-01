@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
+import './part 2/Ex.2.6-2.11/style.css';
 import App from './countries/app';
 
 const notes = [

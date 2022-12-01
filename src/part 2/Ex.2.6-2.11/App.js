@@ -3,14 +3,14 @@ import axios from 'axios';
 
 import Search from './Search';
 import PersonForm from './PersonForm';
-import Person from './Persons';
+import Persons from './Persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNumber] = useState('');
   const [filtered, setFiltered] = useState(persons);
-
+  console.log(filtered);
   useEffect(() => {
     axios.get('http://localhost:3001/persons').then((res) => {
       setPersons(res.data);
@@ -52,6 +52,7 @@ const App = () => {
     let updatedList = persons.filter((item) => {
       return item.name.toLowerCase().includes(query.toLowerCase());
     });
+
     setFiltered(updatedList);
   };
 
@@ -63,7 +64,7 @@ const App = () => {
 
       <br />
       <br />
-      <h3>Add a new</h3>
+      <h3>Add a new person</h3>
       <PersonForm
         addPerson={addPerson}
         newName={newName}
@@ -72,7 +73,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Person persons={persons} filtered={filtered} />
+      <Persons persons={persons} filtered={filtered} />
     </div>
   );
 };
