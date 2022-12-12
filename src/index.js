@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './part 2/Ex.2.6-2.11/style.css';
-import App from './countries/app';
+import './part 2/Ex 2.15-1.18/style.css';
+import App from './part 2/Ex 2.15-1.18/App';
 
-const notes = [
+/* const notes = [
   {
     id: 1,
     content: 'HTML is easy',
@@ -22,7 +22,7 @@ const notes = [
     date: '2019-05-30T19:20:14.298Z',
     important: true,
   },
-];
+]; */
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
