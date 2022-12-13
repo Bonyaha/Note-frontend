@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './part 2/Ex 2.15-1.18/style.css';
-import App from './part 2/Ex 2.15-1.18/App';
+import './part 2/Ex 2.15-2.20/style.css';
+import App from './part 2/Ex 2.15-2.20/App';
 
 /* const notes = [
   {
