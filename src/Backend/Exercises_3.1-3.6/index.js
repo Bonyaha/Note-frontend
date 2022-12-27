@@ -1,11 +1,15 @@
-const { request, response } = require('express');
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
 app.use(express.json());
 
+morgan.token('body', (req) => JSON.stringify(req.body));
+
+app.use(morgan(':url :method :body'));
+
 const generateId = () => {
-  const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
-  return maxId + 1;
+  const id = Math.floor(Math.random() * 9999);
+  return id;
 };
 let persons = [
   {
@@ -36,19 +40,22 @@ app.get('/', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body;
-  if (!body.content) {
+
+  if (!body.name || !body.number) {
     return response.status(404).json({
-      error: 'content missing',
+      error: 'fill in all info(name and number) please',
     });
   }
-  const note = {
-    content: body.content,
-    important: body.important || false,
-    date: new Date(),
+  if (persons.find((p) => p.name === body.name)) {
+    return response.status(404).json({ error: 'name must be unique' });
+  }
+  const person = {
     id: generateId(),
+    name: body.name,
+    number: body.number,
   };
-  persons = persons.concat(note);
-  response.json(note);
+  persons = persons.concat(person);
+  response.json(person);
 });
 
 app.get('/api/persons/', (request, response) => response.json(persons));
@@ -59,7 +66,8 @@ app.get('/api/persons/:id', (request, response) => {
   if (note) {
     response.json(note);
   } else {
-    response.status(404).end();
+    response.status(404);
+    response.send('<h1>Not found</h1>');
   }
 });
 
