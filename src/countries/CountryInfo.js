@@ -9,8 +9,6 @@ const CountryInfo = (props) => {
   let { temp } = props;
   let { languages } = props.country;
   let lang = Object.keys(languages);
-  let lat = props.country.capitalInfo.latlng[0];
-  let lon = props.country.capitalInfo.latlng[1];
 
   let { country } = props;
   return (
