@@ -49,7 +49,7 @@ const App = () => {
   const toggleImportanceOf = (id) => {
     const note = notes.find((n) => n.id === id);
     const changedNote = { ...note, important: !note.important };
-
+    console.log('Changed');
     noteService
       .update(id, changedNote)
       .then((returnedNote) => {
@@ -65,12 +65,18 @@ const App = () => {
         setNotes(notes.filter((n) => n.id !== id));
       });
   };
+  const delNote = (id) => {
+    window.confirm(`Delete this note?`);
+    noteService.del(id);
+    noteService.getAll().then((initialNotes) => {
+      setNotes(initialNotes);
+    });
+  };
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
-  console.log(notesToShow);
 
   return (
-    <div>
+    <div className="m-2">
       <h1>Notes</h1>
       <Notification message={errorMessage} />
       <div>
@@ -84,6 +90,7 @@ const App = () => {
             key={note.id}
             note={note}
             toggleImportance={() => toggleImportanceOf(note.id)}
+            delNote={() => delNote(note.id)}
           />
         ))}
       </ul>
