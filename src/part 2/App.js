@@ -33,7 +33,7 @@ const App = () => {
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() > 0.5,
-      id: notes.length + 1,
+      noteId: notes.length + 1,
     };
 
     noteService.create(noteObject).then((returnedNote) => {
@@ -53,6 +53,7 @@ const App = () => {
     noteService
       .update(id, changedNote)
       .then((returnedNote) => {
+        console.log(returnedNote);
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
       })
       .catch((error) => {
@@ -70,6 +71,34 @@ const App = () => {
     noteService.del(id);
     noteService.getAll().then((initialNotes) => {
       setNotes(initialNotes);
+    });
+  };
+
+  const moveUp = (id) => {
+    //const note = notes.find((n) => n.id === id);
+    //console.log(note.id);
+    const idN = notes.findIndex((n) => n.id === id);
+    console.log(idN);
+
+    let updated = [...notes];
+    updated.splice(
+      idN === 0 ? updated.length - 1 : idN - 1,
+      0,
+      updated.splice(idN, 1)[0]
+    );
+    //console.log(updated);
+    /* noteService.getAll().then((initialNotes) => {
+      //console.log(initialNotes);
+      initialNotes.splice(idN - 1, 0, initialNotes.splice(idN, 1)[0]);
+      //console.log(initialNotes);
+      updated = updated.concat(initialNotes);
+      
+    }); */
+
+    noteService.update(id, updated).then((returnedNote) => {
+      console.log('prepare');
+      console.log(returnedNote);
+      //setNotes(returnedNote);
     });
   };
 
@@ -91,6 +120,7 @@ const App = () => {
             note={note}
             toggleImportance={() => toggleImportanceOf(note.id)}
             delNote={() => delNote(note.id)}
+            moveUp={() => moveUp(note.id)}
           />
         ))}
       </ul>
