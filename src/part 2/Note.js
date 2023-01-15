@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Note = ({ note, toggleImportance, delNote, moveUp }) => {
+const Note = ({ note, toggleImportance, delNote, makeUrgent }) => {
   const label = note.important ? 'make not important' : 'make important';
+
   return (
     <li className="note">
-      {note.content}
-
+      <span className={note.urgent ? 'urgent' : ''}>{note.content}</span>
       <button
         onClick={toggleImportance}
         className="m-1 btn-outline-dark btn-sm"
@@ -15,7 +15,7 @@ const Note = ({ note, toggleImportance, delNote, moveUp }) => {
       <button onClick={delNote} className="m-1 btn-outline-dark btn-sm">
         Delete
       </button>
-      <button onClick={moveUp}>Move up⬆</button>
+      <button onClick={makeUrgent}>Move up⬆</button>
     </li>
   );
 };
