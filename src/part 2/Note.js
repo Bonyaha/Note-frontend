@@ -15,7 +15,9 @@ const Note = ({ note, toggleImportance, delNote, makeUrgent }) => {
       <button onClick={delNote} className="m-1 btn-outline-dark btn-sm">
         Delete
       </button>
-      <button onClick={makeUrgent}>Move up⬆</button>
+      <button onClick={makeUrgent} className="m-1 btn-outline-dark btn-sm">
+        {note.urgent ? 'make not urgent' : 'urgent'}
+      </button>
     </li>
   );
 };

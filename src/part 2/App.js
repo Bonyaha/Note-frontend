@@ -100,7 +100,7 @@ const App = () => {
             note={note}
             toggleImportance={() => toggleImportanceOf(note.id)}
             delNote={() => delNote(note.id)}
-            moveUp={() => makeUrgent(note.id)}
+            makeUrgent={() => makeUrgent(note.id)}
           />
         ))}
       </ul>
