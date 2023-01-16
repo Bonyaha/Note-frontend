@@ -35,7 +35,9 @@ const App = () => {
       important: Math.random() > 0.5,
       urgent: false,
     };
-
+    if (noteObject.content === '') {
+      alert('Hey');
+    }
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
       setNewNote('');
@@ -89,7 +91,7 @@ const App = () => {
       <h1>Notes</h1>
       <Notification message={errorMessage} />
       <div>
-        <button onClick={() => setShowAll(!showAll)}>
+        <button className="btn btn-info" onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
         </button>
       </div>
@@ -105,8 +107,19 @@ const App = () => {
         ))}
       </ul>
       <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} />
-        <button type="submit">save</button>
+        <div className="input-group mb-1 w-50">
+          <input
+            type="text"
+            value={newNote}
+            className="form-control"
+            onChange={handleNoteChange}
+            required
+          />
+
+          <button type="submit" className="ms-0 btn btn-light btn-sm">
+            save
+          </button>
+        </div>
       </form>
       <Footer />
     </div>

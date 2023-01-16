@@ -6,7 +6,7 @@ body {
   background-color: #666c74;
 }
 h1 {
-  color: rgb(26, 227, 167);
+  color: rgb(18, 18, 33);
   font-style: italic;
 }
 
@@ -26,4 +26,9 @@ h1 {
 }
 .urgent {
   background-color: darkorange;
+  border-radius: 5px;
+  padding: 0px 2px 2px 2px;
+}
+span {
+  font-size: 1.5rem;
 }
