@@ -20,7 +20,8 @@ const App = () => {
   const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-
+  const [noteEditing, setNoteEditing] = useState(null);
+  const [editingText, setEditingText] = useState('');
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
       setNotes(initialNotes);
@@ -43,7 +44,7 @@ const App = () => {
       setNewNote('');
     });
   };
-  console.log(notes);
+
   const handleNoteChange = (event) => {
     setNewNote(event.target.value);
   };
@@ -55,7 +56,6 @@ const App = () => {
     noteService
       .update(id, changedNote)
       .then((returnedNote) => {
-        console.log(returnedNote);
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
       })
       .catch((error) => {
@@ -76,12 +76,14 @@ const App = () => {
     });
   };
 
-  const makeUrgent = (id) => {
+  const submitEdits = (id) => {
     const note = notes.find((n) => n.id === id);
-    const changedNote = { ...note, urgent: !note.urgent };
+    console.log(editingText);
+    const changedNote = { ...note, content: editingText };
     noteService.update(id, changedNote).then((returnedNote) => {
       setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
     });
+    setNoteEditing(null);
   };
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
@@ -102,7 +104,10 @@ const App = () => {
             note={note}
             toggleImportance={() => toggleImportanceOf(note.id)}
             delNote={() => delNote(note.id)}
-            makeUrgent={() => makeUrgent(note.id)}
+            noteEditing={noteEditing}
+            setEditingText={setEditingText}
+            setNoteEditing={setNoteEditing}
+            submitEdits={submitEdits}
           />
         ))}
       </ul>

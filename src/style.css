@@ -24,12 +24,12 @@ h1 {
   padding: 10px;
   margin-bottom: 10px;
 }
-.urgent {
+.important {
   background-color: darkorange;
   border-radius: 5px;
   padding: 0px 2px 2px 2px;
 }
-.urgent::before {
+.important::before {
   content: '❗';
 }
 span {
