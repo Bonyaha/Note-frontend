@@ -12,8 +12,8 @@ h1 {
 
 .note {
   color: #040404;
-  padding-top: 5px;
-  font-size: 15px;
+
+  font-size: 4.5rem;
 }
 .error {
   color: red;
@@ -32,6 +32,14 @@ h1 {
 .important::before {
   content: '❗';
 }
+li {
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
 span {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+}
+.control {
+  display: inline-block;
+  margin-right: 10px;
 }

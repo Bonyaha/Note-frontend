@@ -33,11 +33,10 @@ const App = () => {
     const noteObject = {
       content: newNote,
       date: new Date().toISOString(),
-      important: Math.random() > 0.5,
-      urgent: false,
+      important: false,
     };
-    if (noteObject.content === '') {
-      alert('Hey');
+    if (noteObject.content.length < 5) {
+      alert('Please add more text');
     }
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
@@ -89,7 +88,7 @@ const App = () => {
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
   return (
-    <div className="m-2">
+    <div className="m-3 w-auto">
       <h1>Notes</h1>
       <Notification message={errorMessage} />
       <div>
@@ -97,7 +96,7 @@ const App = () => {
           show {showAll ? 'important' : 'all'}
         </button>
       </div>
-      <ul>
+      <ol>
         {notesToShow.map((note) => (
           <Note
             key={note.id}
@@ -110,7 +109,7 @@ const App = () => {
             submitEdits={submitEdits}
           />
         ))}
-      </ul>
+      </ol>
       <form onSubmit={addNote}>
         <div className="input-group mb-1 w-50">
           <input
