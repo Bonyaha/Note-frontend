@@ -13,8 +13,8 @@ const Note = ({
 
   return (
     <li>
-      <div className="d-flex ">
-        <div className="flex-grow-1">
+      <div className="d-sm-flex flex-wrap justify-content-between">
+        <div className="">
           {note.id === noteEditing ? (
             <input
               type="text"
@@ -23,7 +23,13 @@ const Note = ({
               }}
             />
           ) : (
-            <span className={note.important ? 'important' : ''}>
+            <span
+              className={
+                note.important
+                  ? 'important bg-light p-1 rounded-1 '
+                  : 'bg-light p-1 rounded-1'
+              }
+            >
               {note.content}
             </span>
           )}

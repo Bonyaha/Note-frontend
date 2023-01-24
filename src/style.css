@@ -13,7 +13,7 @@ h1 {
 .note {
   color: #040404;
 
-  font-size: 4.5rem;
+  overflow: hidden;
 }
 .error {
   color: red;
@@ -25,9 +25,7 @@ h1 {
   margin-bottom: 10px;
 }
 .important {
-  background-color: darkorange;
-  border-radius: 5px;
-  padding: 0px 2px 2px 2px;
+  background-color: darkorange !important;
 }
 .important::before {
   content: '❗';

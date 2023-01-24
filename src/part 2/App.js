@@ -96,20 +96,22 @@ const App = () => {
           show {showAll ? 'important' : 'all'}
         </button>
       </div>
-      <ol>
-        {notesToShow.map((note) => (
-          <Note
-            key={note.id}
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
-            delNote={() => delNote(note.id)}
-            noteEditing={noteEditing}
-            setEditingText={setEditingText}
-            setNoteEditing={setNoteEditing}
-            submitEdits={submitEdits}
-          />
-        ))}
-      </ol>
+      <div className="w-75">
+        <ol>
+          {notesToShow.map((note) => (
+            <Note
+              key={note.id}
+              note={note}
+              toggleImportance={() => toggleImportanceOf(note.id)}
+              delNote={() => delNote(note.id)}
+              noteEditing={noteEditing}
+              setEditingText={setEditingText}
+              setNoteEditing={setNoteEditing}
+              submitEdits={submitEdits}
+            />
+          ))}
+        </ol>
+      </div>
       <form onSubmit={addNote}>
         <div className="input-group mb-1 w-50">
           <input
