@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './style.css';
-import App from './part 2/App';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './style.css'
+import App from './part 5/App'
 
 /* const notes = [
   {
@@ -27,4 +27,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
-);
+)

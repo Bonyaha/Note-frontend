@@ -5,38 +5,42 @@ const baseUrl = '/api/notes'
 let token = null
 
 const setToken = (newToken) => {
-  token = `Bearer ${newToken}`
+  token = `bearer ${newToken}`
 }
 
-const getAll = () => {
-  let request = axios.get(baseUrl)
-  return request.then((res) => res.data)
+const getAll = async () => {
+  let request = await axios.get(baseUrl)
+  return request.data
 }
 
 const create = async (newObject) => {
+  console.log(`get token: ${token}`)
   const config = {
     headers: { Authorization: token },
   }
+  console.log('test')
   const response = await axios.post(baseUrl, newObject, config)
+
   return response.data
 }
 
-const update = (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject)
-  return request.then((res) => res.data)
+const update = async (id, newObject) => {
+  const request = await axios.put(`${baseUrl}/${id}`, newObject)
+  return request.data
 }
-const del = (id) => {
-  axios.delete(`${baseUrl}/${id}`)
-}
-const delMany = () => {
-  axios.delete(`${baseUrl}`)
+
+const delMany = async (noteIds) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  await axios.delete(`${baseUrl}`, { data: { ids: noteIds }, ...config })
 }
 
 export default {
   getAll,
   create,
   update,
-  del,
+
   delMany,
   setToken,
 }

@@ -20,6 +20,7 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [noteEditing, setNoteEditing] = useState(null)
   const [editingText, setEditingText] = useState('')
@@ -37,7 +38,9 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+
       noteService.setToken(user.token)
+      console.log(user.token)
     }
   }, [])
 
@@ -50,7 +53,13 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setSuccessMessage(`Hello ${user.name}👋`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     } catch (exception) {
+      setUsername('')
+      setPassword('')
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
@@ -58,6 +67,10 @@ const App = () => {
     }
   }
 
+  const logOut = () => {
+    window.localStorage.clear()
+    setUser(null)
+  }
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
@@ -72,11 +85,15 @@ const App = () => {
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote))
       setNewNote('')
+      setSuccessMessage(`Added ${returnedNote.content}`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     })
   }
 
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
+  const handleNoteChange = (value) => {
+    setNewNote(value)
   }
 
   const toggleImportanceOf = (id) => {
@@ -98,14 +115,33 @@ const App = () => {
         setNotes(notes.filter((n) => n.id !== id))
       })
   }
-  const delNote = (id) => {
-    window.confirm(`Delete this note?`)
-    noteService.del(id)
-    noteService.getAll().then((initialNotes) => {
-      setNotes(initialNotes)
-    })
-  }
 
+  const deleteNotes = async (id) => {
+    let num = 1
+    if (!id) {
+      if (window.confirm(`Delete these notes?`)) {
+        let notesToDelete = notes.filter((n) => n.checked === true)
+        if (notesToDelete.length > 0) {
+          num = notesToDelete.length
+          const noteIds = notesToDelete.map((n) => n.id)
+          await noteService.delMany(noteIds)
+          const initialNotes = await noteService.getAll()
+          setNotes(initialNotes)
+        }
+      }
+    } else {
+      if (window.confirm(`Delete this note?`)) {
+        await noteService.delMany([id])
+        const initialNotes = await noteService.getAll()
+        setNotes(initialNotes)
+      }
+    }
+
+    setSuccessMessage(`Deleted ${num} ${num > 1 ? 'notes' : 'note'}`)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
+  }
   const submitEdits = (id) => {
     const note = notes.find((n) => n.id === id)
     console.log(editingText)
@@ -117,7 +153,6 @@ const App = () => {
   }
   const handleCheck = (id) => {
     const note = notes.find((n) => n.id === id)
-    //console.log(note)
     const changedNote = { ...note, checked: !note.checked }
     if (changedNote.changed) console.log('Changed')
 
@@ -125,25 +160,14 @@ const App = () => {
       setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)))
     })
   }
-  const deleteNote = () => {
-    let x = notes.filter((n) => n.checked === true)
-    console.log('Pussy')
-    if (x.length > 1) {
-      console.log('test')
-      noteService.delMany()
-      noteService.getAll().then((initialNotes) => {
-        setNotes(initialNotes)
-      })
-    }
-  }
+
   const showDeleteMany = notes.filter((n) => n.checked === true)
-  //console.log(showDeleteMany)
   const notesToShow = showAll ? notes : notes.filter((note) => note.important)
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
-        username
+        username:
         <input
           type="text"
           value={username}
@@ -152,7 +176,7 @@ const App = () => {
         />
       </div>
       <div>
-        password
+        password:
         <input
           type="password"
           value={password}
@@ -170,7 +194,7 @@ const App = () => {
           type="text"
           value={newNote}
           className="form-control"
-          onChange={handleNoteChange}
+          onChange={({ target }) => handleNoteChange(target.value)}
           required
         />
 
@@ -178,28 +202,13 @@ const App = () => {
           save
         </button>
       </div>
-    </form>
-  )
-  return (
-    <div className="m-3 w-auto">
-      <h1>Notes app</h1>
-      <Notification message={errorMessage} />
-
-      {user === null && loginForm()}
-      {user && (
-        <div>
-          <p>{user.name} logged in</p>
-
-          {noteForm()}
-        </div>
-      )}
 
       <div>
         <button className="btn btn-info" onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
         </button>
         {showDeleteMany.length > 1 ? (
-          <button className="btn btn-info ms-2" onClick={() => delNote()}>
+          <button className="btn btn-info ms-2" onClick={() => deleteNotes()}>
             Delete selected
           </button>
         ) : (
@@ -213,7 +222,7 @@ const App = () => {
               key={note.id}
               note={note}
               toggleImportance={() => toggleImportanceOf(note.id)}
-              delNote={() => deleteNote(note.id)}
+              delNote={() => deleteNotes(note.id)}
               noteEditing={noteEditing}
               setEditingText={setEditingText}
               setNoteEditing={setNoteEditing}
@@ -223,6 +232,24 @@ const App = () => {
           ))}
         </ol>
       </div>
+    </form>
+  )
+  return (
+    <div className="m-3 w-auto">
+      <h1>Notes app</h1>
+      <Notification message={errorMessage} isError={true} />
+      <Notification message={successMessage} />
+
+      {user === null && loginForm()}
+      {user && (
+        <div>
+          {user.name} logged in
+          <button type="submit" onClick={logOut}>
+            log out
+          </button>
+          {noteForm()}
+        </div>
+      )}
 
       <Footer />
     </div>

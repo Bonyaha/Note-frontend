@@ -21,7 +21,6 @@ const Note = ({
               className="form-check-input m-1"
               type="checkbox"
               id="myCheck"
-              required
               checked={note.checked}
               onChange={handleCheck}
             ></input>
