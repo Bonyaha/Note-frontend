@@ -1,31 +1,22 @@
-import { useState, useEffect } from 'react'
-import Note from './Note'
+import { useState, useEffect, useRef } from 'react'
+
+import Note from './components/Note'
 import noteService from './services/notes'
 import loginService from './services/login'
-import Notification from './Notification'
-
-const Footer = () => {
-  const footerStyle = { color: 'white', fontStyle: 'italic', fontSize: 16 }
-  return (
-    <div style={footerStyle}>
-      <br />
-      <em>
-        Note app, Department of Computer Science, University of Helsinki 2022
-      </em>
-    </div>
-  )
-}
+import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
+import Togglable from './components/Togglable'
+import Footer from './components/Footer'
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [noteEditing, setNoteEditing] = useState(null)
   const [editingText, setEditingText] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -40,26 +31,35 @@ const App = () => {
       setUser(user)
 
       noteService.setToken(user.token)
-      console.log(user.token)
+
+      const expirationTime = new Date(user.expirationDate).getTime()
+      const currentTime = new Date().getTime()
+      console.log(expirationTime)
+      console.log(currentTime)
+      console.log(expirationTime > currentTime)
+      if (expirationTime < currentTime) {
+        setUser(null)
+        setErrorMessage('Your session has expired. Please log in again.')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
     }
   }, [])
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
+  const noteFormRef = useRef()
+
+  const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
       noteService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
       setSuccessMessage(`Hello ${user.name}👋`)
       setTimeout(() => {
         setSuccessMessage(null)
       }, 5000)
     } catch (exception) {
-      setUsername('')
-      setPassword('')
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
@@ -71,29 +71,19 @@ const App = () => {
     window.localStorage.clear()
     setUser(null)
   }
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      date: new Date().toISOString(),
-      important: false,
-      checked: false,
-    }
+  const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()
     if (noteObject.content.length < 5) {
       alert('Please add more text')
     }
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote))
-      setNewNote('')
+
       setSuccessMessage(`Added ${returnedNote.content}`)
       setTimeout(() => {
         setSuccessMessage(null)
       }, 5000)
     })
-  }
-
-  const handleNoteChange = (value) => {
-    setNewNote(value)
   }
 
   const toggleImportanceOf = (id) => {
@@ -105,7 +95,7 @@ const App = () => {
       .then((returnedNote) => {
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)))
       })
-      .catch((error) => {
+      .catch(() => {
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
         )
@@ -119,7 +109,7 @@ const App = () => {
   const deleteNotes = async (id) => {
     let num = 1
     if (!id) {
-      if (window.confirm(`Delete these notes?`)) {
+      if (window.confirm('Delete these notes?')) {
         let notesToDelete = notes.filter((n) => n.checked === true)
         if (notesToDelete.length > 0) {
           num = notesToDelete.length
@@ -130,7 +120,7 @@ const App = () => {
         }
       }
     } else {
-      if (window.confirm(`Delete this note?`)) {
+      if (window.confirm('Delete this note?')) {
         await noteService.delMany([id])
         const initialNotes = await noteService.getAll()
         setNotes(initialNotes)
@@ -164,90 +154,64 @@ const App = () => {
   const showDeleteMany = notes.filter((n) => n.checked === true)
   const notesToShow = showAll ? notes : notes.filter((note) => note.important)
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username:
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password:
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
-  )
-  const noteForm = () => (
-    <form onSubmit={addNote}>
-      <div className="input-group mb-1 w-50">
-        <input
-          type="text"
-          value={newNote}
-          className="form-control"
-          onChange={({ target }) => handleNoteChange(target.value)}
-          required
-        />
-
-        <button type="submit" className="ms-0 btn btn-light btn-sm">
-          save
-        </button>
-      </div>
-
-      <div>
-        <button className="btn btn-info" onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all'}
-        </button>
-        {showDeleteMany.length > 1 ? (
-          <button className="btn btn-info ms-2" onClick={() => deleteNotes()}>
-            Delete selected
-          </button>
-        ) : (
-          ''
-        )}
-      </div>
-      <div className="w-75">
-        <ol>
-          {notesToShow.map((note) => (
-            <Note
-              key={note.id}
-              note={note}
-              toggleImportance={() => toggleImportanceOf(note.id)}
-              delNote={() => deleteNotes(note.id)}
-              noteEditing={noteEditing}
-              setEditingText={setEditingText}
-              setNoteEditing={setNoteEditing}
-              submitEdits={submitEdits}
-              handleCheck={() => handleCheck(note.id)}
-            />
-          ))}
-        </ol>
-      </div>
-    </form>
-  )
   return (
     <div className="m-3 w-auto">
       <h1>Notes app</h1>
       <Notification message={errorMessage} isError={true} />
       <Notification message={successMessage} />
 
-      {user === null && loginForm()}
+      {user === null && (
+        <Togglable buttonLabel="log in">
+          <LoginForm handleLogin={handleLogin} />
+        </Togglable>
+      )}
       {user && (
         <div>
-          {user.name} logged in
-          <button type="submit" onClick={logOut}>
-            log out
-          </button>
-          {noteForm()}
+          <p>
+            {' '}
+            {user.name} logged in
+            <button type="submit" onClick={logOut}>
+              log out
+            </button>
+          </p>
+          <Togglable buttonLabel="new note" ref={noteFormRef}>
+            <NoteForm createNote={addNote} />
+          </Togglable>
+          <div>
+            <button
+              className="btn btn-info"
+              onClick={() => setShowAll(!showAll)}
+            >
+              show {showAll ? 'important' : 'all'}
+            </button>
+            {showDeleteMany.length > 1 ? (
+              <button
+                className="btn btn-info ms-2"
+                onClick={() => deleteNotes()}
+              >
+                Delete selected
+              </button>
+            ) : (
+              ''
+            )}
+          </div>
+          <div className="w-75">
+            <ol>
+              {notesToShow.map((note) => (
+                <Note
+                  key={note.id}
+                  note={note}
+                  toggleImportance={() => toggleImportanceOf(note.id)}
+                  delNote={() => deleteNotes(note.id)}
+                  noteEditing={noteEditing}
+                  setEditingText={setEditingText}
+                  setNoteEditing={setNoteEditing}
+                  submitEdits={submitEdits}
+                  handleCheck={() => handleCheck(note.id)}
+                />
+              ))}
+            </ol>
+          </div>
         </div>
       )}
 

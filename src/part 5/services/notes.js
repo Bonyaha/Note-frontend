@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios'
 const baseUrl = '/api/notes'
 
@@ -40,7 +39,6 @@ export default {
   getAll,
   create,
   update,
-
   delMany,
   setToken,
 }
