@@ -39,7 +39,7 @@ const Note = ({
                     : 'bg-light p-1 rounded-1'
                 }
               >
-                {note.content}
+                Your awesome note: {note.content}
               </span>
             )}
           </div>
