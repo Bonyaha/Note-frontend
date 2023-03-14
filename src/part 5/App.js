@@ -155,13 +155,13 @@ const App = () => {
   const notesToShow = showAll ? notes : notes.filter((note) => note.important)
 
   return (
-    <div className="m-3 w-auto">
+    <div className='m-3 w-auto'>
       <h1>Notes app</h1>
       <Notification message={errorMessage} isError={true} />
       <Notification message={successMessage} />
 
       {user === null && (
-        <Togglable buttonLabel="log in">
+        <Togglable buttonLabel='log in'>
           <LoginForm handleLogin={handleLogin} />
         </Togglable>
       )}
@@ -170,23 +170,23 @@ const App = () => {
           <p>
             {' '}
             {user.name} logged in
-            <button type="submit" onClick={logOut}>
+            <button type='submit' onClick={logOut}>
               log out
             </button>
           </p>
-          <Togglable buttonLabel="new note" ref={noteFormRef}>
+          <Togglable buttonLabel='new note' ref={noteFormRef}>
             <NoteForm createNote={addNote} />
           </Togglable>
           <div>
             <button
-              className="btn btn-info"
+              className='btn btn-info'
               onClick={() => setShowAll(!showAll)}
             >
               show {showAll ? 'important' : 'all'}
             </button>
             {showDeleteMany.length > 1 ? (
               <button
-                className="btn btn-info ms-2"
+                className='btn btn-info ms-2'
                 onClick={() => deleteNotes()}
               >
                 Delete selected
@@ -195,7 +195,7 @@ const App = () => {
               ''
             )}
           </div>
-          <div className="w-75">
+          <div className='w-75'>
             <ol>
               {notesToShow.map((note) => (
                 <Note
@@ -208,6 +208,7 @@ const App = () => {
                   setNoteEditing={setNoteEditing}
                   submitEdits={submitEdits}
                   handleCheck={() => handleCheck(note.id)}
+                  editingText={editingText}
                 />
               ))}
             </ol>

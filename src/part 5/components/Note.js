@@ -5,6 +5,7 @@ const Note = ({
   toggleImportance,
   delNote,
   noteEditing,
+  editingText,
   setEditingText,
   setNoteEditing,
   submitEdits,
@@ -12,21 +13,26 @@ const Note = ({
 }) => {
   const label = note.important ? 'make not important' : 'make important'
 
+  const handleNoteEditing = (id, content) => {
+    setNoteEditing(id)
+    setEditingText(content)
+  }
   return (
     <>
       <li>
-        <div className="d-sm-flex flex-wrap justify-content-between">
-          <div className="">
+        <div className='d-sm-flex flex-wrap justify-content-between'>
+          <div className=''>
             <input
-              className="form-check-input m-1"
-              type="checkbox"
-              id="myCheck"
+              className='form-check-input m-1'
+              type='checkbox'
+              id='myCheck'
               checked={note.checked}
               onChange={handleCheck}
             ></input>
             {note.id === noteEditing ? (
               <input
-                type="text"
+                type='text'
+                value={editingText}
                 onChange={(e) => {
                   setEditingText(e.target.value)
                 }}
@@ -43,31 +49,31 @@ const Note = ({
               </span>
             )}
           </div>
-          <div className="">
+          <div className=''>
             {note.id === noteEditing ? (
               <button
                 onClick={() => submitEdits(note.id)}
-                className="m-1 btn-outline-dark btn-sm "
+                className='m-1 btn-outline-dark btn-sm '
               >
                 Submit edit
               </button>
             ) : (
               <button
-                onClick={() => setNoteEditing(note.id)}
-                className="m-1 btn-outline-dark btn-sm "
+                onClick={() => handleNoteEditing(note.id, note.content)}
+                className='m-1 btn-outline-dark btn-sm '
               >
                 🖋
               </button>
             )}
             <button
               onClick={toggleImportance}
-              className="btn-outline-dark btn-sm me-2"
+              className='btn-outline-dark btn-sm me-2'
             >
               {label}
             </button>
             <button
               onClick={delNote}
-              className=" btn-outline-dark btn-sm me-5 "
+              className=' btn-outline-dark btn-sm me-5 '
             >
               Delete
             </button>
