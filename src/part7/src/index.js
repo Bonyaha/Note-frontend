@@ -1,15 +1,33 @@
 import ReactDOM from 'react-dom/client'
-import { useState } from 'react'
+import { useCounter } from './hooks/useCounter'
+import { useField } from './hooks/useField'
 
 const App = () => {
-  const [counter, setCounter] = useState(0)
+  /* const counter = useCounter()
 
   return (
     <div>
-      <div>{counter}</div>
-      <button onClick={() => setCounter(counter + 1)}>plus</button>
-      <button onClick={() => setCounter(counter - 1)}>minus</button>
-      <button onClick={() => setCounter(0)}>zero</button>
+      <div>{counter.value}</div>
+      <button onClick={counter.increase}>plus</button>
+      <button onClick={counter.decrease}>minus</button>
+      <button onClick={counter.zero}>zero</button>
+    </div>
+  ) */
+  const name = useField('text')
+  const born = useField('date')
+  const height = useField('number')
+
+  return (
+    <div>
+      <form>
+        name:
+        <input {...name} />
+        birthdate:
+        <input {...born} />
+        height:
+        <input {...height} />
+      </form>
+      {name.value} {born.value} {height.value}
     </div>
   )
 }
