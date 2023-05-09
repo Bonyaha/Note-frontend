@@ -105,6 +105,11 @@ const CreateNew = (props) => {
     props.showNotification(`New anecdote "${content}" added!`)
     navigate('/')
   }
+  const handleReset = () => {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
 
   const content = useField('content')
   const author = useField('author')
@@ -124,10 +129,12 @@ const CreateNew = (props) => {
         </div>
         <div>
           url for more info
-          <input {...author} />
+          <input {...info} />
         </div>
         <button type='submit'>create</button>
-        <button type='button'>reset</button>
+        <button type='button' onClick={handleReset}>
+          reset
+        </button>
       </form>
     </div>
   )
