@@ -11,7 +11,35 @@ import {
   useNavigate,
   useMatch,
 } from 'react-router-dom'
+import styled from 'styled-components'
 
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
+
+const Input = styled.input`
+  margin: 0.35em;
+`
+const Page = styled.div`
+  padding: 1em;
+  background: papayawhip;
+`
+
+const Navigation = styled.div`
+  background: BurlyWood;
+  padding: 1em;
+`
+
+const Footer = styled.div`
+  background: Chocolate;
+  padding: 1em;
+  margin-top: 1em;
+`
 const Home = () => (
   <div>
     <h2>TKTL notes app</h2>
@@ -79,12 +107,14 @@ const Login = (props) => {
       <h2>login</h2>
       <form onSubmit={onSubmit}>
         <div>
-          username: <input />
+          username: <Input />
         </div>
         <div>
-          password: <input type='password' />
+          password: <Input type='password' />
         </div>
-        <button type='submit'>login</button>
+        <Button type='submit' primary=''>
+          login
+        </Button>
       </form>
     </div>
   )
@@ -129,8 +159,8 @@ const App = () => {
   }
 
   return (
-    <div>
-      <div>
+    <Page>
+      <Navigation>
         <Link style={padding} to='/'>
           home
         </Link>
@@ -147,7 +177,7 @@ const App = () => {
             login
           </Link>
         )}
-      </div>
+      </Navigation>
       <Routes>
         <Route path='/notes/:id' element={<Note note={note} />} />
         <Route path='/notes' element={<Notes notes={notes} />} />
@@ -158,11 +188,11 @@ const App = () => {
         <Route path='/login' element={<Login onLogin={login} />} />
         <Route path='/' element={<Home />} />
       </Routes>
-      <div>
+      <Footer>
         <br />
         <em>Note app, Department of Computer Science 2022</em>
-      </div>
-    </div>
+      </Footer>
+    </Page>
   )
 }
 
