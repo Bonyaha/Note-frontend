@@ -88,7 +88,7 @@ const App = () => {
       .then((returnedNote) => {
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)))
       })
-      .catch((error) => {
+      .catch(() => {
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
         )
@@ -99,7 +99,7 @@ const App = () => {
       })
   }
   const delNote = (id) => {
-    window.confirm(`Delete this note?`)
+    window.confirm('Delete this note?')
     noteService.del(id)
     noteService.getAll().then((initialNotes) => {
       setNotes(initialNotes)
@@ -145,43 +145,43 @@ const App = () => {
       <div>
         username
         <input
-          type="text"
+          type='text'
           value={username}
-          name="Username"
+          name='Username'
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
       <div>
         password
         <input
-          type="password"
+          type='password'
           value={password}
-          name="Password"
+          name='Password'
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button type='submit'>login</button>
     </form>
   )
   const noteForm = () => (
     <form onSubmit={addNote}>
-      <div className="input-group mb-1 w-50">
+      <div className='input-group mb-1 w-50'>
         <input
-          type="text"
+          type='text'
           value={newNote}
-          className="form-control"
+          className='form-control'
           onChange={handleNoteChange}
           required
         />
 
-        <button type="submit" className="ms-0 btn btn-light btn-sm">
+        <button type='submit' className='ms-0 btn btn-light btn-sm'>
           save
         </button>
       </div>
     </form>
   )
   return (
-    <div className="m-3 w-auto">
+    <div className='m-3 w-auto'>
       <h1>Notes app</h1>
       <Notification message={errorMessage} />
 
@@ -195,18 +195,18 @@ const App = () => {
       )}
 
       <div>
-        <button className="btn btn-info" onClick={() => setShowAll(!showAll)}>
+        <button className='btn btn-info' onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
         </button>
         {showDeleteMany.length > 1 ? (
-          <button className="btn btn-info ms-2" onClick={() => delNote()}>
+          <button className='btn btn-info ms-2' onClick={() => delNote()}>
             Delete selected
           </button>
         ) : (
           ''
         )}
       </div>
-      <div className="w-75">
+      <div className='w-75'>
         <ol>
           {notesToShow.map((note) => (
             <Note
